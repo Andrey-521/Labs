@@ -1,134 +1,192 @@
 package ru.university.lab2.strings;
 
-public final class StringLab {
+public class StringLab {
 
-    private StringLab() {
+    public void run() {
+        Palindrome();
+        Reverse_Words();
+        Count_Characters();
+        Caesar();
+        Longest_Word();
     }
 
-    public static void run() {
-        System.out.println("\n===== Обработка текста =====");
+    private void Palindrome() {
+        String[] tests = {
+                "А роза упала на лапу Азора",
+                "Madam, I'm Adam",
+                "Привет, мир!",
+                "12321",
+                "12345"
+        };
 
-        String palindrome =
-                "А роза упала на лапу Азора!";
-
-        System.out.println("Палиндром: "
-                + isPalindrome(palindrome));
-
-        String sentence = "кот съел мышь";
-
-        System.out.println("Исходная строка: " + sentence);
-        System.out.println("Обратный порядок слов: "
-                + reverseWords(sentence));
-
-        String text = "Hello Мир 123";
-        int[] statistics = countCharacters(text);
-
-        System.out.println("Гласных: " + statistics[0]);
-        System.out.println("Согласных: " + statistics[1]);
-        System.out.println("Цифр: " + statistics[2]);
-        System.out.println("Пробелов: " + statistics[3]);
-
-        String encrypted = caesarEncrypt("Hello, World!", 3);
-
-        System.out.println("Шифр Цезаря: " + encrypted);
-        System.out.println("Расшифровка: "
-                + caesarDecrypt(encrypted, 3));
-
-        System.out.println("Самое длинное слово: "
-                + findLongestWord(
-                "Это предложение с самым длинным словом"));
+        for (String test : tests) {
+            System.out.println("\"" + test + "\" -> " + isPalindrome(test));
+        }
+        System.out.println();
     }
 
-    private static boolean isPalindrome(String text) {
-        String normalized = text
-                .toLowerCase()
-                .replaceAll("[^\\p{L}\\p{N}]", "");
+    private boolean isPalindrome(String text) {
+        char[] chars = text.toCharArray();
+        int left = 0;
+        int right = chars.length - 1;
 
-        String reversed = new StringBuilder(normalized)
-                .reverse()
-                .toString();
-
-        return normalized.equals(reversed);
-    }
-
-    private static String reverseWords(String sentence) {
-        String[] words = sentence.trim().split("\\s+");
-        StringBuilder result = new StringBuilder();
-
-        for (int i = words.length - 1; i >= 0; i--) {
-            if (result.length() > 0) {
-                result.append(' ');
+        while (left < right) {
+            while (left < right && !Character.isLetterOrDigit(chars[left])) {
+                left++;
+            }
+            while (left < right && !Character.isLetterOrDigit(chars[right])) {
+                right--;
             }
 
-            result.append(words[i]);
+            char l = Character.toLowerCase(chars[left]);
+            char r = Character.toLowerCase(chars[right]);
+
+            if (l != r) {
+                return false;
+            }
+
+            left++;
+            right--;
         }
 
-        return result.toString();
+        return true;
     }
 
-    private static int[] countCharacters(String text) {
+    private void Reverse_Words() {
+        String sentence = "кот съел мышь";
+        System.out.println("до:    " + sentence);
+        System.out.println("после: " + reverseWords(sentence));
+        System.out.println();
+    }
+
+    private String reverseWords(String sentence) {
+        String trimmed = sentence.trim();
+        if (trimmed.isEmpty()) {
+            return "";
+        }
+
+        String[] words = trimmed.split("\\s+");
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = words.length - 1; i >= 0; i--) {
+            sb.append(words[i]);
+            if (i > 0) {
+                sb.append(' ');
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private void Count_Characters() {
+        String text = "Hello, мир! 123";
+        int[] counts = countCharacters(text);
+
+        System.out.println("Текст: " + text);
+        System.out.println("Гласные:   " + counts[0]);
+        System.out.println("Согласные: " + counts[1]);
+        System.out.println("Цифры:     " + counts[2]);
+        System.out.println("Пробелы:   " + counts[3]);
+        System.out.println();
+    }
+
+    private int[] countCharacters(String text) {
         int vowels = 0;
         int consonants = 0;
         int digits = 0;
         int spaces = 0;
 
-        for (int i = 0; i < text.length(); i++) {
-            char ch = Character.toLowerCase(text.charAt(i));
-
-            if (isVowel(ch)) {
-                vowels++;
-            } else if (Character.isLetter(ch)) {
-                consonants++;
-            } else if (Character.isDigit(ch)) {
+        for (char c : text.toCharArray()) {
+            if (Character.isDigit(c)) {
                 digits++;
-            } else if (Character.isWhitespace(ch)) {
+            } else if (Character.isWhitespace(c)) {
                 spaces++;
+            } else if (isVowel(c)) {
+                vowels++;
+            } else if (isConsonant(c)) {
+                consonants++;
             }
         }
 
         return new int[]{vowels, consonants, digits, spaces};
     }
 
-    private static boolean isVowel(char ch) {
-        return "аеёиоуыэюяaeiou".indexOf(ch) >= 0;
+    private boolean isVowel(char c) {
+        char lower = Character.toLowerCase(c);
+        return "aeiouyаеёиоуыэюя".indexOf(lower) >= 0;
     }
 
-    private static String caesarEncrypt(String text, int shift) {
-        return caesar(text, shift);
+    private boolean isConsonant(char c) {
+        char lower = Character.toLowerCase(c);
+        return "bcdfghjklmnpqrstvwxyzбвгджзйклмнпрстфхцчшщ".indexOf(lower) >= 0;
     }
 
-    private static String caesarDecrypt(String text, int shift) {
-        return caesar(text, -shift);
+    private void Caesar() {
+        String original = "Hello, World!";
+        int shift = 3;
+
+        String encrypted = caesarEncrypt(original, shift);
+        String decrypted = caesarDecrypt(encrypted, shift);
+
+        System.out.println("Оригинал:    " + original);
+        System.out.println("Шифр:        " + encrypted);
+        System.out.println("Расшифровка: " + decrypted);
+        System.out.println();
     }
 
-    private static String caesar(String text, int shift) {
-        char[] chars = text.toCharArray();
-        shift = Math.floorMod(shift, 26);
+    private String caesarEncrypt(String text, int shift) {
+        return caesarShift(text, shift);
+    }
 
-        for (int i = 0; i < chars.length; i++) {
-            char ch = chars[i];
+    private String caesarDecrypt(String text, int shift) {
+        return caesarShift(text, -shift);
+    }
 
-            if (ch >= 'a' && ch <= 'z') {
-                chars[i] = (char) (
-                        'a' + (ch - 'a' + shift) % 26
-                );
-            } else if (ch >= 'A' && ch <= 'Z') {
-                chars[i] = (char) (
-                        'A' + (ch - 'A' + shift) % 26
-                );
+    private String caesarShift(String text, int shift) {
+        StringBuilder sb = new StringBuilder();
+
+        for (char c : text.toCharArray()) {
+            if (c >= 'A' && c <= 'Z') {
+                sb.append((char) ('A' + normalizeShift(c - 'A' + shift)));
+            } else if (c >= 'a' && c <= 'z') {
+                sb.append((char) ('a' + normalizeShift(c - 'a' + shift)));
+            } else {
+                sb.append(c);
             }
         }
 
-        return new String(chars);
+        return sb.toString();
     }
 
-    private static String findLongestWord(String text) {
-        String longest = "";
+    private int normalizeShift(int value) {
+        return ((value % 26) + 26) % 26;
+    }
 
-        for (String word : text.split("\\s+")) {
-            if (word.length() > longest.length()) {
-                longest = word;
+    private void Longest_Word() {
+        String text = "Java — это мощный язык программирования";
+        System.out.println("Текст: " + text);
+        System.out.println("Самое длинное слово: " + findLongestWord(text));
+        System.out.println();
+    }
+
+    private String findLongestWord(String text) {
+        char[] chars = text.toCharArray();
+        String longest = "";
+        StringBuilder current = new StringBuilder();
+
+        for (char c : chars) {
+            if (Character.isLetter(c)) {
+                current.append(c);
+            } else {
+                if (current.length() > longest.length()) {
+                    longest = current.toString();
+                }
+                current.setLength(0);
             }
+        }
+
+        if (current.length() > longest.length()) {
+            longest = current.toString();
         }
 
         return longest;

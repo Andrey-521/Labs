@@ -1,46 +1,68 @@
 package ru.university.lab2.arrays;
 
-public final class MultidimensionalArrays {
+import java.util.Random;
 
-    private MultidimensionalArrays() {
-    }
+public class MultidimensionalArrays {
 
-    public static void run() {
-        System.out.println("\n===== Многомерные массивы =====");
+    public void run() {
+        int[][] matrix = createMatrix(3, 4);
 
-        int[][] matrix = {
-                {1, 2, 3},
-                {4, 5, 6}
-        };
-
-        System.out.println("Исходная матрица:");
         printMatrix(matrix);
 
-        System.out.println("Транспонированная матрица:");
-        printMatrix(transpose(matrix));
+        int[][] transposed = transpose(matrix);
+        printMatrix(transposed);
 
-        int[][] first = {
-                {1, 2, 3},
-                {4, 5, 6}
-        };
+        int[][] a = createMatrix(2, 3);
+        int[][] b = createMatrix(3, 2);
 
-        int[][] second = {
-                {7, 8},
-                {9, 10},
-                {11, 12}
-        };
+        System.out.println("A:");
+        printMatrix(a);
 
-        System.out.println("Произведение матриц:");
-        printMatrix(multiply(first, second));
+        System.out.println("B:");
+        printMatrix(b);
+
+        int[][] product = multiply(a, b);
+        if (product != null) {
+            System.out.println("A * B:");
+            printMatrix(product);
+        }
+
+        int[][] wrong = multiply(a, a);
+        System.out.println("Попытка A * A: "
+                + (wrong == null ? "размеры не согласованы" : "выполнено"));
+        System.out.println();
     }
 
-    private static int[][] transpose(int[][] matrix) {
-        int rows = matrix.length;
-        int columns = matrix[0].length;
-        int[][] result = new int[columns][rows];
+    private int[][] createMatrix(int rows, int cols) {
+        Random random = new Random();
+        int[][] matrix = new int[rows][cols];
 
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] = random.nextInt(10);
+            }
+        }
+
+        return matrix;
+    }
+
+    private void printMatrix(int[][] matrix) {
+        for (int[] row : matrix) {
+            for (int value : row) {
+                System.out.printf("%4d", value);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    private int[][] transpose(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int[][] result = new int[cols][rows];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 result[j][i] = matrix[i][j];
             }
         }
@@ -48,34 +70,29 @@ public final class MultidimensionalArrays {
         return result;
     }
 
-    private static int[][] multiply(int[][] first, int[][] second) {
-        if (first[0].length != second.length) {
-            throw new IllegalArgumentException(
-                    "Матрицы нельзя перемножить"
-            );
+    private int[][] multiply(int[][] a, int[][] b) {
+        if (a[0].length != b.length) {
+            System.out.println("Нельзя умножить: число столбцов A ("
+                    + a[0].length + ") не равно числу строк B ("
+                    + b.length + ")");
+            return null;
         }
 
-        int[][] result =
-                new int[first.length][second[0].length];
+        int rows = a.length;
+        int cols = b[0].length;
+        int inner = a[0].length;
+        int[][] result = new int[rows][cols];
 
-        for (int i = 0; i < first.length; i++) {
-            for (int j = 0; j < second[0].length; j++) {
-                for (int k = 0; k < second.length; k++) {
-                    result[i][j] += first[i][k] * second[k][j];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                int sum = 0;
+                for (int k = 0; k < inner; k++) {
+                    sum += a[i][k] * b[k][j];
                 }
+                result[i][j] = sum;
             }
         }
 
         return result;
-    }
-
-    private static void printMatrix(int[][] matrix) {
-        for (int[] row : matrix) {
-            for (int value : row) {
-                System.out.printf("%5d", value);
-            }
-
-            System.out.println();
-        }
     }
 }
