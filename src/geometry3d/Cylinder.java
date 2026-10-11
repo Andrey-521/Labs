@@ -1,7 +1,7 @@
 package geometry3d;
 
+import exceptions.InvalidFigureParameterException;
 import geometry2d.Figure;
-import exceptions.ShapeException;
 
 import java.io.Serializable;
 
@@ -11,19 +11,28 @@ public class Cylinder implements Serializable {
     private final Figure base;
     private final double height;
 
-    public Cylinder(Figure base, double height) throws ShapeException {
+    public Cylinder(Figure base, double height)  {
         if (base == null) {
-            throw new ShapeException("Основание цилиндра не должно быть null");
+            throw new InvalidFigureParameterException("base", "не должен быть null");
         }
 
         if (!Double.isFinite(height) || height <= 0) {
-            throw new ShapeException(
-                    "Высота цилиндра должна быть положительным конечным числом"
+            throw new InvalidFigureParameterException(
+                    "height",
+                    "должна быть положительным конечным числом, получено " + height
             );
         }
 
         this.base = base;
         this.height = height;
+    }
+
+    public Figure getBase() {
+        return base;
+    }
+
+    public double getHeight() {
+        return height;
     }
 
     public double volume() {
@@ -32,6 +41,6 @@ public class Cylinder implements Serializable {
 
     @Override
     public String toString() {
-        return "Cylinder[base=" + base + ", height=" + height + "]";
+        return "Cylinder{base=" + base + ", height=" + height + "}";
     }
 }

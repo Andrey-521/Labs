@@ -1,17 +1,19 @@
 package geometry2d;
 
-import exceptions.ShapeException;
+import exceptions.InvalidFigureParameterException;
 
 public class Circle implements Figure {
     private static final long serialVersionUID = 1L;
 
     private final double radius;
 
-    public Circle(double radius) throws ShapeException {
+    public Circle(double radius) {
         if (!Double.isFinite(radius) || radius <= 0) {
-            throw new ShapeException("Радиус должен быть положительным конечным числом");
+            throw new InvalidFigureParameterException(
+                    "radius",
+                    "должен быть положительным конечным числом, получено " + radius
+            );
         }
-
         this.radius = radius;
     }
 
