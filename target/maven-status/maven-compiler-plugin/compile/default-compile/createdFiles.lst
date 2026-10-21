@@ -1,0 +1,10 @@
+exceptions\InvalidFigureParameterException.class
+storage\FigureStorage.class
+exceptions\FigureFormatException.class
+geometry2d\Rectangle.class
+storage\BinaryFigureStorage.class
+geometry2d\Figure.class
+app\Main.class
+geometry3d\Cylinder.class
+geometry2d\Circle.class
+storage\TextFigureStorage.class
