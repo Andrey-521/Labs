@@ -6,4 +6,5 @@ public interface Figure extends Serializable {
     double area();
 
     double perimeter();
+
 }

@@ -1,7 +1,3 @@
-# Java Lab3
-
+# Java Lab4
+## Сборка проекта с Maven и модульное тестирование с JUni
 ## Луцык Андрей Сергеевич ФИТ-251
-
-##  javac -d out src/app/Main.java src/exceptions/*.java src/geometry2d/*.java src/geometry3d/*.java src/storage/*.java
-
-## java -cp out app/Main
