@@ -1,0 +1,48 @@
+### IntelliJ IDEA ###
+out/
+!lab6/src/main/**/out/
+!lab6/src/test/**/out/
+.kotlin
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!lab6/src/main/**/bin/
+!lab6/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+# Скомпилированные классы
+*.class
+
+# Собранные архивы
+*.jar
+
+# Временные файлы сборки
+sources.txt
+
+# IDE
+.idea/
+*.iml
+
+# Операционная система
+Thumbs.db
+target/
+.settings/
